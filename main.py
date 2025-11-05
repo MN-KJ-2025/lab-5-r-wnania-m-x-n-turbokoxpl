@@ -8,9 +8,9 @@
 #     - Weryfikujące poprawność wyników dla prawidłowych danych wejściowych.
 # =============================================================================
 import numpy as np
+from typing import Tuple,Union 
 
-
-def spare_matrix_Abt(m: int, n: int) -> tuple[np.ndarray, np.ndarray] | None:
+def spare_matrix_Abt(m: int, n: int) -> Union[Tuple[np.ndarray, np.ndarray],None]:
     """Funkcja tworząca zestaw składający się z macierzy A (m,n) i
     wektora b (m,) na podstawie pomocniczego wektora t (m,).
 
@@ -24,12 +24,15 @@ def spare_matrix_Abt(m: int, n: int) -> tuple[np.ndarray, np.ndarray] | None:
             - Wektor b (m,).
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    t = np.linspace(0,1,num=m)
+    A = np.vander(t,n,increasing=True)
+    b = np.cos(t)
+    return A,b
 
 
 def square_from_rectan(
     A: np.ndarray, b: np.ndarray
-) -> tuple[np.ndarray, np.ndarray] | None:
+) -> Union[Tuple[np.ndarray, np.ndarray],None]:
     """Funkcja przekształcająca układ równań z prostokątną macierzą współczynników
     na kwadratowy układ równań.
     A^T * A * x = A^T * b  ->  A_new * x = b_new
@@ -44,10 +47,13 @@ def square_from_rectan(
             - Wektor b_new (n,).
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    A_new= A.T @ A
+    b_new=A.T @ b
+    
+    return A_new,b_new
 
 
-def residual_norm(A: np.ndarray, x: np.ndarray, b: np.ndarray) -> float | None:
+def residual_norm(A: np.ndarray, x: np.ndarray, b: np.ndarray) -> Union[float,None]:
     """Funkcja obliczająca normę residuum dla równania postaci:
     Ax = b
 
@@ -60,4 +66,5 @@ def residual_norm(A: np.ndarray, x: np.ndarray, b: np.ndarray) -> float | None:
         (float): Wartość normy residuum dla podanych parametrów.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    
+    return np.linalg.norm(A @x-b)
